@@ -1,0 +1,103 @@
+﻿@using EmployeesWebApp.Models.Entities;
+@model IEnumerable<Empleado>
+
+@{
+    ViewData["Title"] = "Index";
+
+    Pagination pagination = new Pagination();
+
+    int pageNum = 0;
+
+    if(ViewBag.Pagination != null)
+    {
+        pagination = ViewBag.Pagination;
+        pageNum = pagination.CurrentPage;
+    }
+}
+
+<h1 style="margin-top: 25px;" >Listado de Empleados</h1>
+   
+    <input id="myInput" type="text" placeholder="Buscar.." class="form-control" style="font-family: 'Poppins', sans-serif; width: 195px; height: 35px; margin-top:15px; margin-bottom:2px">
+    
+<table class="table" style="font-family: 'Poppins', sans-serif;">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Fotografia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaContratacion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CorreoElectronico)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Puesto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Estado)
+            </th>
+            <th>
+                <a asp-action="Create" class="btn btn-sm btn-success" style="width:92px !important">
+                            Nuevo
+                 </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody  id="myTable">
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                    <img src="@("~/image/"+item.Fotografia)" asp-append-version="true" width="50px" height="50px" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaContratacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CorreoElectronico)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Puesto.Descripcion)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Estado.Descripcion)
+                </td>
+            <td>
+               <div class="btn-group" style="margin-top: 10px;">
+                  <a asp-action="Edit" asp-route-id="@item.EmpleadoId" class="btn btn-warning btn-sm" style="margin-right:5px" >Editar</a>
+                  <a asp-action="Details" asp-route-id="@item.EmpleadoId" class="btn btn-light btn-sm">Detalles</a>
+               </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<div class = "container">
+    @if(pagination.TotalPages > 0)
+    {
+        <ul class="pagination justify-content-end">
+            @for (var pge = pagination.StartPage; pge <= pagination.EndPage; pge++)
+            {
+                <li class="page-item @(pge == pagination.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-controller="Empleados" asp-action="Index" asp-route-pg="@pge">@pge</a>
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+
+
